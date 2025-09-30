@@ -378,13 +378,6 @@ const ListView: React.FC = () => {
             </div>
           </div>
         )}
-
-        {!pokemon && pokemonList.length === 0 && !loading && !error && (
-          <div className="search-hint">
-            <p>Search for any Pokémon by name to see their details!</p>
-            <p>Try partial searches like: <strong>char</strong> (for Charizard), <strong>water</strong> (for Water-type Pokémon), or <strong>pika</strong> (for Pikachu)</p>
-          </div>
-        )}
       </div>
     </div>
   );
