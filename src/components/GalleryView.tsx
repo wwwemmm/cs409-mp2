@@ -141,6 +141,15 @@ const GalleryView: React.FC = () => {
     return colors[typeName] || '#68A090';
   };
 
+  const getFallbackSprite = (pokemon: Pokemon): string => {
+    // For Koraidon variants, use base Koraidon sprite
+    if (pokemon.name.includes('koraidon')) {
+      return 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1007.png';
+    }
+    // For other Pokémon, try the standard sprite
+    return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`;
+  };
+
   if (loading && !selectedType) {
     return (
       <div className="gallery-view">
@@ -240,16 +249,12 @@ const GalleryView: React.FC = () => {
                         style={{ backgroundColor: `${getTypeColor(typeGroup.name)}20` }}
                       >
                         <img 
-                          src={pokemon.sprites.front_default || pokemon.sprites.other?.home?.front_default || pokemon.sprites.other?.official_artwork?.front_default || `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`}
+                          src={pokemon.sprites.front_default || pokemon.sprites.other?.home?.front_default || pokemon.sprites.other?.official_artwork?.front_default || getFallbackSprite(pokemon)}
                           alt={pokemon.name}
                           className="pokemon-gallery-sprite"
                           onError={(e) => {
                             const target = e.target as HTMLImageElement;
-                            if (target.src.includes('raw.githubusercontent.com')) {
-                              target.style.display = 'none';
-                            } else {
-                              target.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`;
-                            }
+                            target.src = getFallbackSprite(pokemon);
                           }}
                         />
                       </div>

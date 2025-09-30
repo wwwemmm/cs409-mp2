@@ -75,6 +75,15 @@ const ListView: React.FC = () => {
     return stat ? stat.base_stat : 0;
   };
 
+  const getFallbackSprite = (pokemon: Pokemon): string => {
+    // For Koraidon variants, use base Koraidon sprite
+    if (pokemon.name.includes('koraidon')) {
+      return 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1007.png';
+    }
+    // For other Pokémon, try the standard sprite
+    return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`;
+  };
+
   const sortPokemonList = (list: Pokemon[]) => {
     return [...list].sort((a, b) => {
       let aValue: string | number;
@@ -197,16 +206,12 @@ const ListView: React.FC = () => {
     <div key={pokemon.id} className="pokemon-card">
       <div className="pokemon-image">
         <img 
-          src={pokemon.sprites.front_default || pokemon.sprites.other?.home?.front_default || pokemon.sprites.other?.official_artwork?.front_default || `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`}
+          src={pokemon.sprites.front_default || pokemon.sprites.other?.home?.front_default || pokemon.sprites.other?.official_artwork?.front_default || getFallbackSprite(pokemon)}
           alt={pokemon.name}
           className="pokemon-sprite"
           onError={(e) => {
             const target = e.target as HTMLImageElement;
-            if (target.src.includes('raw.githubusercontent.com')) {
-              target.style.display = 'none';
-            } else {
-              target.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`;
-            }
+            target.src = getFallbackSprite(pokemon);
           }}
         />
       </div>
