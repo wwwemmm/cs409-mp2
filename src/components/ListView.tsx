@@ -36,7 +36,7 @@ const ListView: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [sortBy, setSortBy] = useState<'name' | 'id' | 'height' | 'weight' | 'hp' | 'attack' | 'defense' | 'special-attack' | 'special-defense' | 'speed'>('name');
+  const [sortBy, setSortBy] = useState<'name' | 'hp' | 'attack' | 'defense'>('name');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
   // Fetch all Pokémon names for partial matching
@@ -76,18 +76,6 @@ const ListView: React.FC = () => {
           aValue = a.name.toLowerCase();
           bValue = b.name.toLowerCase();
           break;
-        case 'id':
-          aValue = a.id;
-          bValue = b.id;
-          break;
-        case 'height':
-          aValue = a.height;
-          bValue = b.height;
-          break;
-        case 'weight':
-          aValue = a.weight;
-          bValue = b.weight;
-          break;
         case 'hp':
           aValue = getStatValue(a, 'hp');
           bValue = getStatValue(b, 'hp');
@@ -99,18 +87,6 @@ const ListView: React.FC = () => {
         case 'defense':
           aValue = getStatValue(a, 'defense');
           bValue = getStatValue(b, 'defense');
-          break;
-        case 'special-attack':
-          aValue = getStatValue(a, 'special-attack');
-          bValue = getStatValue(b, 'special-attack');
-          break;
-        case 'special-defense':
-          aValue = getStatValue(a, 'special-defense');
-          bValue = getStatValue(b, 'special-defense');
-          break;
-        case 'speed':
-          aValue = getStatValue(a, 'speed');
-          bValue = getStatValue(b, 'speed');
           break;
         default:
           aValue = a.name.toLowerCase();
@@ -295,23 +271,17 @@ const ListView: React.FC = () => {
           <div className="sorting-bar">
             <div className="sorting-controls">
               <label htmlFor="sort-by" className="sort-label">Sort by:</label>
-              <select
-                id="sort-by"
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as 'name' | 'id' | 'height' | 'weight' | 'hp' | 'attack' | 'defense' | 'special-attack' | 'special-defense' | 'speed')}
-                className="sort-select"
-              >
-                <option value="name">Name</option>
-                <option value="id">ID Number</option>
-                <option value="height">Height</option>
-                <option value="weight">Weight</option>
-                <option value="hp">HP</option>
-                <option value="attack">Attack</option>
-                <option value="defense">Defense</option>
-                <option value="special-attack">Special Attack</option>
-                <option value="special-defense">Special Defense</option>
-                <option value="speed">Speed</option>
-              </select>
+                  <select
+                    id="sort-by"
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value as 'name' | 'hp' | 'attack' | 'defense')}
+                    className="sort-select"
+                  >
+                    <option value="name">Name</option>
+                    <option value="hp">HP</option>
+                    <option value="attack">Attack</option>
+                    <option value="defense">Defense</option>
+                  </select>
               
               <label htmlFor="sort-order" className="sort-label">Order:</label>
               <select
