@@ -143,12 +143,22 @@ const ListView: React.FC = () => {
           {pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}
         </h3>
         <div className="pokemon-info">
-          <p><strong>ID:</strong> #{pokemon.id}</p>
+          <p>
+            <strong>ID:</strong> 
+            <span className="pokemon-id">#{pokemon.id}</span>
+          </p>
           <p><strong>Height:</strong> {pokemon.height / 10}m</p>
           <p><strong>Weight:</strong> {pokemon.weight / 10}kg</p>
-          <p><strong>Types:</strong> {pokemon.types.map(type => 
-            type.type.name.charAt(0).toUpperCase() + type.type.name.slice(1)
-          ).join(', ')}</p>
+          <p>
+            <strong>Types:</strong>
+            <span className="pokemon-types">
+              {pokemon.types.map(type => (
+                <span key={type.type.name} className="type-badge">
+                  {type.type.name.charAt(0).toUpperCase() + type.type.name.slice(1)}
+                </span>
+              ))}
+            </span>
+          </p>
         </div>
       </div>
     </div>
