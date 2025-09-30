@@ -14,6 +14,12 @@ interface Pokemon {
   sprites: {
     front_default: string;
   };
+  stats: Array<{
+    base_stat: number;
+    stat: {
+      name: string;
+    };
+  }>;
 }
 
 interface PokemonListItem {
@@ -30,7 +36,7 @@ const ListView: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [sortBy, setSortBy] = useState<'name' | 'id' | 'height' | 'weight'>('name');
+  const [sortBy, setSortBy] = useState<'name' | 'id' | 'height' | 'weight' | 'hp' | 'attack' | 'defense' | 'special-attack' | 'special-defense' | 'speed'>('name');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
   // Fetch all Pokémon names for partial matching
@@ -55,6 +61,11 @@ const ListView: React.FC = () => {
     }
   }, [sortBy, sortOrder]);
 
+  const getStatValue = (pokemon: Pokemon, statName: string): number => {
+    const stat = pokemon.stats.find(s => s.stat.name === statName);
+    return stat ? stat.base_stat : 0;
+  };
+
   const sortPokemonList = (list: Pokemon[]) => {
     return [...list].sort((a, b) => {
       let aValue: string | number;
@@ -76,6 +87,30 @@ const ListView: React.FC = () => {
         case 'weight':
           aValue = a.weight;
           bValue = b.weight;
+          break;
+        case 'hp':
+          aValue = getStatValue(a, 'hp');
+          bValue = getStatValue(b, 'hp');
+          break;
+        case 'attack':
+          aValue = getStatValue(a, 'attack');
+          bValue = getStatValue(b, 'attack');
+          break;
+        case 'defense':
+          aValue = getStatValue(a, 'defense');
+          bValue = getStatValue(b, 'defense');
+          break;
+        case 'special-attack':
+          aValue = getStatValue(a, 'special-attack');
+          bValue = getStatValue(b, 'special-attack');
+          break;
+        case 'special-defense':
+          aValue = getStatValue(a, 'special-defense');
+          bValue = getStatValue(b, 'special-defense');
+          break;
+        case 'speed':
+          aValue = getStatValue(a, 'speed');
+          bValue = getStatValue(b, 'speed');
           break;
         default:
           aValue = a.name.toLowerCase();
@@ -183,26 +218,29 @@ const ListView: React.FC = () => {
         />
       </div>
       <div className="pokemon-details">
-        <h3 className="pokemon-name">
-          {pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}
-        </h3>
         <div className="pokemon-info">
-          <p>
-            <strong>ID:</strong> 
-            <span className="pokemon-id">#{pokemon.id}</span>
-          </p>
-          <p><strong>Height:</strong> {pokemon.height / 10}m</p>
-          <p><strong>Weight:</strong> {pokemon.weight / 10}kg</p>
-          <p>
-            <strong>Types:</strong>
-            <span className="pokemon-types">
-              {pokemon.types.map(type => (
-                <span key={type.type.name} className="type-badge">
-                  {type.type.name.charAt(0).toUpperCase() + type.type.name.slice(1)}
-                </span>
-              ))}
-            </span>
-          </p>
+          <div className="info-column name-column">
+            <h3 className="pokemon-name">
+              {pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}
+            </h3>
+          </div>
+          <div className="info-column">
+            <p><strong>HP:</strong> {getStatValue(pokemon, 'hp')}</p>
+            <p><strong>Attack:</strong> {getStatValue(pokemon, 'attack')}</p>
+          </div>
+          <div className="info-column">
+            <p><strong>Defense:</strong> {getStatValue(pokemon, 'defense')}</p>
+            <p>
+              <strong>Types:</strong>
+              <span className="pokemon-types">
+                {pokemon.types.map(type => (
+                  <span key={type.type.name} className="type-badge">
+                    {type.type.name.charAt(0).toUpperCase() + type.type.name.slice(1)}
+                  </span>
+                ))}
+              </span>
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -260,13 +298,19 @@ const ListView: React.FC = () => {
               <select
                 id="sort-by"
                 value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as 'name' | 'id' | 'height' | 'weight')}
+                onChange={(e) => setSortBy(e.target.value as 'name' | 'id' | 'height' | 'weight' | 'hp' | 'attack' | 'defense' | 'special-attack' | 'special-defense' | 'speed')}
                 className="sort-select"
               >
                 <option value="name">Name</option>
                 <option value="id">ID Number</option>
                 <option value="height">Height</option>
                 <option value="weight">Weight</option>
+                <option value="hp">HP</option>
+                <option value="attack">Attack</option>
+                <option value="defense">Defense</option>
+                <option value="special-attack">Special Attack</option>
+                <option value="special-defense">Special Defense</option>
+                <option value="speed">Speed</option>
               </select>
               
               <label htmlFor="sort-order" className="sort-label">Order:</label>
