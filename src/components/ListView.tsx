@@ -12,7 +12,16 @@ interface Pokemon {
     };
   }>;
   sprites: {
-    front_default: string;
+    front_default: string | null;
+    front_shiny: string | null;
+    other?: {
+      home?: {
+        front_default: string | null;
+      };
+      official_artwork?: {
+        front_default: string | null;
+      };
+    };
   };
   stats: Array<{
     base_stat: number;
@@ -43,7 +52,7 @@ const ListView: React.FC = () => {
   useEffect(() => {
     const fetchPokemonNames = async () => {
       try {
-        const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=1000');
+        const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=1302&_t=' + Date.now());
         const data = await response.json();
         setAllPokemon(data.results);
       } catch (err) {
@@ -188,9 +197,17 @@ const ListView: React.FC = () => {
     <div key={pokemon.id} className="pokemon-card">
       <div className="pokemon-image">
         <img 
-          src={pokemon.sprites.front_default} 
+          src={pokemon.sprites.front_default || pokemon.sprites.other?.home?.front_default || pokemon.sprites.other?.official_artwork?.front_default || `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`}
           alt={pokemon.name}
           className="pokemon-sprite"
+          onError={(e) => {
+            const target = e.target as HTMLImageElement;
+            if (target.src.includes('raw.githubusercontent.com')) {
+              target.style.display = 'none';
+            } else {
+              target.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`;
+            }
+          }}
         />
       </div>
       <div className="pokemon-details">

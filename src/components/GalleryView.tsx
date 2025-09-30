@@ -10,7 +10,16 @@ interface Pokemon {
     };
   }>;
   sprites: {
-    front_default: string;
+    front_default: string | null;
+    front_shiny: string | null;
+    other?: {
+      home?: {
+        front_default: string | null;
+      };
+      official_artwork?: {
+        front_default: string | null;
+      };
+    };
   };
 }
 
@@ -75,8 +84,8 @@ const GalleryView: React.FC = () => {
         const typeResponse = await fetch(`https://pokeapi.co/api/v2/type/${typeName}`);
         const typeData = await typeResponse.json();
         
-        // Get first 12 Pokémon from this type
-        const pokemonPromises = typeData.pokemon.slice(0, 12).map(async (pokemonEntry: any) => {
+        // Get all Pokémon from this type
+        const pokemonPromises = typeData.pokemon.map(async (pokemonEntry: any) => {
           const pokemonResponse = await fetch(pokemonEntry.pokemon.url);
           return pokemonResponse.json();
         });
@@ -231,9 +240,17 @@ const GalleryView: React.FC = () => {
                         style={{ backgroundColor: `${getTypeColor(typeGroup.name)}20` }}
                       >
                         <img 
-                          src={pokemon.sprites.front_default} 
+                          src={pokemon.sprites.front_default || pokemon.sprites.other?.home?.front_default || pokemon.sprites.other?.official_artwork?.front_default || `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`}
                           alt={pokemon.name}
                           className="pokemon-gallery-sprite"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            if (target.src.includes('raw.githubusercontent.com')) {
+                              target.style.display = 'none';
+                            } else {
+                              target.src = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`;
+                            }
+                          }}
                         />
                       </div>
                       <div className="pokemon-gallery-name">
