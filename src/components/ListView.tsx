@@ -30,6 +30,8 @@ const ListView: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [sortBy, setSortBy] = useState<'name' | 'id' | 'height' | 'weight'>('name');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
   // Fetch all Pokémon names for partial matching
   useEffect(() => {
@@ -44,6 +46,47 @@ const ListView: React.FC = () => {
     };
     fetchPokemonNames();
   }, []);
+
+  // Re-sort existing results when sorting options change
+  useEffect(() => {
+    if (pokemonList.length > 0) {
+      const sortedResults = sortPokemonList(pokemonList);
+      setPokemonList(sortedResults);
+    }
+  }, [sortBy, sortOrder]);
+
+  const sortPokemonList = (list: Pokemon[]) => {
+    return [...list].sort((a, b) => {
+      let aValue: string | number;
+      let bValue: string | number;
+
+      switch (sortBy) {
+        case 'name':
+          aValue = a.name.toLowerCase();
+          bValue = b.name.toLowerCase();
+          break;
+        case 'id':
+          aValue = a.id;
+          bValue = b.id;
+          break;
+        case 'height':
+          aValue = a.height;
+          bValue = b.height;
+          break;
+        case 'weight':
+          aValue = a.weight;
+          bValue = b.weight;
+          break;
+        default:
+          aValue = a.name.toLowerCase();
+          bValue = b.name.toLowerCase();
+      }
+
+      if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
+      if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;
+      return 0;
+    });
+  };
 
   const searchPokemon = async (name: string) => {
     if (!name.trim()) {
@@ -91,7 +134,8 @@ const ListView: React.FC = () => {
         });
         
         const results = await Promise.all(promises);
-        setPokemonList(results);
+        const sortedResults = sortPokemonList(results);
+        setPokemonList(sortedResults);
         setPokemon(null);
       }
     } catch (err) {
@@ -208,6 +252,36 @@ const ListView: React.FC = () => {
             </button>
           </div>
         </form>
+
+        {(pokemonList.length > 0 || pokemon) && (
+          <div className="sorting-bar">
+            <div className="sorting-controls">
+              <label htmlFor="sort-by" className="sort-label">Sort by:</label>
+              <select
+                id="sort-by"
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as 'name' | 'id' | 'height' | 'weight')}
+                className="sort-select"
+              >
+                <option value="name">Name</option>
+                <option value="id">ID Number</option>
+                <option value="height">Height</option>
+                <option value="weight">Weight</option>
+              </select>
+              
+              <label htmlFor="sort-order" className="sort-label">Order:</label>
+              <select
+                id="sort-order"
+                value={sortOrder}
+                onChange={(e) => setSortOrder(e.target.value as 'asc' | 'desc')}
+                className="sort-select"
+              >
+                <option value="asc">Ascending</option>
+                <option value="desc">Descending</option>
+              </select>
+            </div>
+          </div>
+        )}
 
         {error && (
           <div className="error-message">
