@@ -94,10 +94,6 @@ const GalleryView: React.FC = () => {
     setSelectedType(typeName);
   };
 
-  const handleShowAll = () => {
-    setSelectedType(null);
-    setPokemonByType([]);
-  };
 
   const getTypeColor = (typeName: string): string => {
     const colors: { [key: string]: string } = {
@@ -175,12 +171,6 @@ const GalleryView: React.FC = () => {
         
         {/* Type Selection Buttons */}
         <div className="type-selection">
-          <button 
-            className={`type-button ${!selectedType ? 'active' : ''}`}
-            onClick={handleShowAll}
-          >
-            All Types
-          </button>
           {allTypes.map((type) => (
             <button
               key={type.name}

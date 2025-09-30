@@ -197,7 +197,7 @@ const ListView: React.FC = () => {
         <div className="pokemon-info">
           <div className="info-column name-column">
             <h3 className="pokemon-name">
-              {pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}
+              {pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)} <span className="pokemon-id">#{pokemon.id}</span>
             </h3>
           </div>
           <div className="info-column">
