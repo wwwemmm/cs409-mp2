@@ -142,9 +142,48 @@ const GalleryView: React.FC = () => {
   };
 
   const getFallbackSprite = (pokemon: Pokemon): string => {
+    // Try multiple sprite sources first
+    const spriteSources = [
+      pokemon.sprites.front_default,
+      pokemon.sprites.other?.home?.front_default,
+      pokemon.sprites.other?.official_artwork?.front_default,
+      pokemon.sprites.front_shiny
+    ].filter(Boolean);
+
+    if (spriteSources.length > 0) {
+      return spriteSources[0] as string;
+    }
+
     // For Koraidon variants, use base Koraidon sprite
     if (pokemon.name.includes('koraidon')) {
       return 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1007.png';
+    }
+    // For Miraidon variants, use base Miraidon sprite
+    if (pokemon.name.includes('miraidon')) {
+      return 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1008.png';
+    }
+    // For special Pikachu forms, use base Pikachu sprite
+    if (pokemon.name.includes('pikachu') && pokemon.name !== 'pikachu') {
+      return 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/25.png';
+    }
+    // For Toxtricity variants, use base Toxtricity sprite
+    if (pokemon.name.includes('toxtricity') && pokemon.name !== 'toxtricity') {
+      return 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/849.png';
+    }
+    // For Morpeko variants, use base Morpeko sprite
+    if (pokemon.name.includes('morpeko') && pokemon.name !== 'morpeko') {
+      return 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/877.png';
+    }
+    // For Voltorb/Electrode Hisui forms, use base forms
+    if (pokemon.name.includes('voltorb-hisui')) {
+      return 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/100.png';
+    }
+    if (pokemon.name.includes('electrode-hisui')) {
+      return 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/101.png';
+    }
+    // For Togedemaru variants, use base Togedemaru sprite
+    if (pokemon.name.includes('togedemaru') && pokemon.name !== 'togedemaru') {
+      return 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/777.png';
     }
     // For other Pokémon, try the standard sprite
     return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`;
