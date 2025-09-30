@@ -37,12 +37,25 @@ const GalleryView: React.FC = () => {
         const typesResponse = await fetch('https://pokeapi.co/api/v2/type');
         const typesData = await typesResponse.json();
         
-        // Filter out shadow, unknown, and other non-standard types
-        const mainTypes = typesData.results.filter((type: any) => 
-          !['shadow', 'unknown'].includes(type.name)
-        );
+        // Filter out types with no Pokémon and non-standard types
+        const validTypes = [];
         
-        setAllTypes(mainTypes);
+        for (const type of typesData.results) {
+          // Skip known empty/problematic types
+          if (['shadow', 'unknown', 'stellar'].includes(type.name)) {
+            continue;
+          }
+          
+          // Check if this type has Pokémon
+          const typeResponse = await fetch(type.url);
+          const typeData = await typeResponse.json();
+          
+          if (typeData.pokemon && typeData.pokemon.length > 0) {
+            validTypes.push(type);
+          }
+        }
+        
+        setAllTypes(validTypes);
         setLoading(false);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An error occurred');
