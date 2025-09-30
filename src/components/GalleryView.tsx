@@ -194,10 +194,10 @@ const GalleryView: React.FC = () => {
       <div className="gallery-view">
         <div className="button-container">
           <Link to="/" className="nav-button">
-            List View
+            Search
           </Link>
           <Link to="/gallery" className="nav-button active">
-            Gallery View
+            Gallery
           </Link>
         </div>
         <div className="gallery-container">
@@ -212,10 +212,10 @@ const GalleryView: React.FC = () => {
       <div className="gallery-view">
         <div className="button-container">
           <Link to="/" className="nav-button">
-            List View
+            Search
           </Link>
           <Link to="/gallery" className="nav-button active">
-            Gallery View
+            Gallery
           </Link>
         </div>
         <div className="gallery-container">
@@ -229,10 +229,10 @@ const GalleryView: React.FC = () => {
     <div className="gallery-view">
       <div className="button-container">
         <Link to="/" className="nav-button">
-          List View
+          Search
         </Link>
         <Link to="/gallery" className="nav-button active">
-          Gallery View
+          Gallery
         </Link>
       </div>
       

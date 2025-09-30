@@ -157,8 +157,8 @@ const PokemonDetail: React.FC = () => {
     return (
       <div className="detail-view">
         <div className="button-container">
-          <Link to="/" className="nav-button">List View</Link>
-          <Link to="/gallery" className="nav-button">Gallery View</Link>
+          <Link to="/" className="nav-button">Search</Link>
+          <Link to="/gallery" className="nav-button">Gallery</Link>
         </div>
         <div className="detail-container">
           <div className="loading">Loading Pokémon details...</div>
@@ -171,8 +171,8 @@ const PokemonDetail: React.FC = () => {
     return (
       <div className="detail-view">
         <div className="button-container">
-          <Link to="/" className="nav-button">List View</Link>
-          <Link to="/gallery" className="nav-button">Gallery View</Link>
+          <Link to="/" className="nav-button">Search</Link>
+          <Link to="/gallery" className="nav-button">Gallery</Link>
         </div>
         <div className="detail-container">
           <div className="error-message">{error}</div>
@@ -185,8 +185,8 @@ const PokemonDetail: React.FC = () => {
     return (
       <div className="detail-view">
         <div className="button-container">
-          <Link to="/" className="nav-button">List View</Link>
-          <Link to="/gallery" className="nav-button">Gallery View</Link>
+          <Link to="/" className="nav-button">Search</Link>
+          <Link to="/gallery" className="nav-button">Gallery</Link>
         </div>
         <div className="detail-container">
           <div className="error-message">No Pokémon data available.</div>

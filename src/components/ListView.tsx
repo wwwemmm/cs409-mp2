@@ -287,10 +287,10 @@ const ListView: React.FC = () => {
     <div className="list-view">
       <div className="button-container">
         <Link to="/" className="nav-button active">
-          List View
+          Search
         </Link>
         <Link to="/gallery" className="nav-button">
-          Gallery View
+          Gallery
         </Link>
       </div>
       
