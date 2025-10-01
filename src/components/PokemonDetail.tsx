@@ -143,11 +143,6 @@ const PokemonDetail: React.FC = () => {
     return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`;
   };
 
-  const getStatValue = (statName: string): number => {
-    if (!pokemon) return 0;
-    const stat = pokemon.stats.find(s => s.stat.name === statName);
-    return stat ? stat.base_stat : 0;
-  };
 
   if (loading) {
     return (

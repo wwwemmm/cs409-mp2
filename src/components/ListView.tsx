@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 
@@ -62,13 +62,46 @@ const ListView: React.FC = () => {
     fetchPokemonNames();
   }, []);
 
+  const sortPokemonList = useCallback((list: Pokemon[]) => {
+    return [...list].sort((a, b) => {
+      let aValue: string | number;
+      let bValue: string | number;
+
+      switch (sortBy) {
+        case 'name':
+          aValue = a.name.toLowerCase();
+          bValue = b.name.toLowerCase();
+          break;
+        case 'hp':
+          aValue = getStatValue(a, 'hp');
+          bValue = getStatValue(b, 'hp');
+          break;
+        case 'attack':
+          aValue = getStatValue(a, 'attack');
+          bValue = getStatValue(b, 'attack');
+          break;
+        case 'defense':
+          aValue = getStatValue(a, 'defense');
+          bValue = getStatValue(b, 'defense');
+          break;
+        default:
+          aValue = a.name.toLowerCase();
+          bValue = b.name.toLowerCase();
+      }
+
+      if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
+      if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;
+      return 0;
+    });
+  }, [sortBy, sortOrder]);
+
   // Re-sort existing results when sorting options change
   useEffect(() => {
     if (pokemonList.length > 0) {
       const sortedResults = sortPokemonList(pokemonList);
       setPokemonList(sortedResults);
     }
-  }, [sortBy, sortOrder]);
+  }, [sortBy, sortOrder, pokemonList, sortPokemonList]);
 
   const getStatValue = (pokemon: Pokemon, statName: string): number => {
     const stat = pokemon.stats.find(s => s.stat.name === statName);
@@ -123,38 +156,6 @@ const ListView: React.FC = () => {
     return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.id}.png`;
   };
 
-  const sortPokemonList = (list: Pokemon[]) => {
-    return [...list].sort((a, b) => {
-      let aValue: string | number;
-      let bValue: string | number;
-
-      switch (sortBy) {
-        case 'name':
-          aValue = a.name.toLowerCase();
-          bValue = b.name.toLowerCase();
-          break;
-        case 'hp':
-          aValue = getStatValue(a, 'hp');
-          bValue = getStatValue(b, 'hp');
-          break;
-        case 'attack':
-          aValue = getStatValue(a, 'attack');
-          bValue = getStatValue(b, 'attack');
-          break;
-        case 'defense':
-          aValue = getStatValue(a, 'defense');
-          bValue = getStatValue(b, 'defense');
-          break;
-        default:
-          aValue = a.name.toLowerCase();
-          bValue = b.name.toLowerCase();
-      }
-
-      if (aValue < bValue) return sortOrder === 'asc' ? -1 : 1;
-      if (aValue > bValue) return sortOrder === 'asc' ? 1 : -1;
-      return 0;
-    });
-  };
 
   const searchPokemon = async (name: string) => {
     if (!name.trim()) {
