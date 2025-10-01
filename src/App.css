@@ -948,6 +948,7 @@
 .pokemon-image-section {
   display: flex;
   align-items: center;
+  width: 70%;
   justify-content: center;
   background: linear-gradient(135deg, #f8f9ff, #e8f0ff);
   border-radius: 16px;

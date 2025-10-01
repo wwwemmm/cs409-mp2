@@ -281,13 +281,6 @@ const GalleryView: React.FC = () => {
             ))}
           </div>
         )}
-
-        {/* No selection message */}
-        {!selectedType && !loading && (
-          <div className="no-selection">
-            <p>Select a Pokémon type above to see Pokémon of that type!</p>
-          </div>
-        )}
       </div>
     </div>
   );

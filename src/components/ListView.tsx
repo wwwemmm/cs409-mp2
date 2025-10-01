@@ -316,7 +316,7 @@ const ListView: React.FC = () => {
                 type="text"
                 value={searchTerm}
                 onChange={handleInputChange}
-                placeholder="Enter Pokémon name (e.g., pikachu, char, water)"
+                placeholder="Enter Pokémon name (e.g., pikachu, char, dragon)"
                 className="search-input"
                 autoComplete="off"
               />
