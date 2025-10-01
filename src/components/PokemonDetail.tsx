@@ -95,6 +95,19 @@ const PokemonDetail: React.FC = () => {
     }
   };
 
+  const getStatBarClass = (statValue: number): string => {
+    if (statValue <= 25) return 'stat-bar stat-width-10';
+    if (statValue <= 50) return 'stat-bar stat-width-20';
+    if (statValue <= 75) return 'stat-bar stat-width-30';
+    if (statValue <= 100) return 'stat-bar stat-width-40';
+    if (statValue <= 125) return 'stat-bar stat-width-50';
+    if (statValue <= 150) return 'stat-bar stat-width-60';
+    if (statValue <= 175) return 'stat-bar stat-width-70';
+    if (statValue <= 200) return 'stat-bar stat-width-80';
+    if (statValue <= 225) return 'stat-bar stat-width-90';
+    return 'stat-bar stat-width-100';
+  };
+
   const getFallbackSprite = (pokemon: Pokemon): string => {
     // Try multiple sprite sources first
     const spriteSources = [
@@ -250,10 +263,7 @@ const PokemonDetail: React.FC = () => {
                         {stat.stat.name.charAt(0).toUpperCase() + stat.stat.name.slice(1).replace('-', ' ')}
                       </span>
                       <div className="stat-bar-container">
-                        <div 
-                          className="stat-bar" 
-                          style={{ width: `${(stat.base_stat / 255) * 100}%` }}
-                        ></div>
+                        <div className={getStatBarClass(stat.base_stat)}></div>
                       </div>
                       <span className="stat-value">{stat.base_stat}</span>
                     </div>

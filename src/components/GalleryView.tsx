@@ -245,13 +245,8 @@ const GalleryView: React.FC = () => {
           {allTypes.map((type) => (
             <button
               key={type.name}
-              className={`type-button ${selectedType === type.name ? 'active' : ''}`}
+              className={`type-button ${type.name} ${selectedType === type.name ? 'active' : ''}`}
               onClick={() => handleTypeClick(type.name)}
-              style={{
-                backgroundColor: selectedType === type.name ? getTypeColor(type.name) : `${getTypeColor(type.name)}40`,
-                borderColor: getTypeColor(type.name),
-                color: selectedType === type.name ? 'white' : getTypeColor(type.name)
-              }}
             >
               {type.name.charAt(0).toUpperCase() + type.name.slice(1)}
             </button>
@@ -268,13 +263,7 @@ const GalleryView: React.FC = () => {
           <div className="pokemon-display">
             {pokemonByType.map((typeGroup) => (
               <div key={typeGroup.name} className="type-section">
-                <h3 
-                  className="type-header"
-                  style={{ 
-                    background: `linear-gradient(135deg, ${getTypeColor(typeGroup.name)}, ${getTypeColor(typeGroup.name)}88)`,
-                    color: 'white'
-                  }}
-                >
+                <h3 className={`type-header ${typeGroup.name}`}>
                   {typeGroup.name.charAt(0).toUpperCase() + typeGroup.name.slice(1)} Type Pokémon
                 </h3>
                 <div className="pokemon-type-grid">
@@ -284,10 +273,7 @@ const GalleryView: React.FC = () => {
                       className="pokemon-gallery-item"
                       onClick={() => handlePokemonClick(pokemon)}
                     >
-                      <div 
-                        className="pokemon-gallery-image"
-                        style={{ backgroundColor: `${getTypeColor(typeGroup.name)}20` }}
-                      >
+                      <div className={`pokemon-gallery-image ${typeGroup.name}`}>
                         <img 
                           src={pokemon.sprites.front_default || pokemon.sprites.other?.home?.front_default || pokemon.sprites.other?.official_artwork?.front_default || getFallbackSprite(pokemon)}
                           alt={pokemon.name}

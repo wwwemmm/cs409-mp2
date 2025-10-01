@@ -171,21 +171,25 @@ const ListView: React.FC = () => {
     
     try {
       // First try exact match
-      const exactResponse = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name.toLowerCase()}`);
-      
-      if (exactResponse.status === 200) {
+      try {
+        const exactResponse = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name.toLowerCase()}`);
         setPokemon(exactResponse.data);
         setPokemonList([]);
         return;
+      } catch (exactError) {
+        // Exact match failed, continue to partial matching
       }
 
-      // If exact match fails, try partial matching
+      // Try partial matching
       const filteredSuggestions = allPokemon.filter(p => 
         p.name.toLowerCase().includes(name.toLowerCase())
       );
 
       if (filteredSuggestions.length === 0) {
-        throw new Error('No Pokémon found matching your search');
+        setError('No Pokémon found matching your search');
+        setPokemon(null);
+        setPokemonList([]);
+        return;
       }
 
       if (filteredSuggestions.length === 1) {
