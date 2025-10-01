@@ -37,11 +37,15 @@ const GalleryView: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  console.log('GalleryView rendered:', { allTypes: allTypes.length, selectedType, loading, error });
+
   useEffect(() => {
     const fetchTypes = async () => {
       try {
         setLoading(true);
         setError(null);
+        setSelectedType(null);
+        setPokemonByType([]);
 
         // Fetch all Pokémon types
         const typesResponse = await axios.get('https://pokeapi.co/api/v2/type');
@@ -110,7 +114,7 @@ const GalleryView: React.FC = () => {
   }, [selectedType]);
 
   const handlePokemonClick = (pokemon: Pokemon) => {
-    navigate(`/pokemon/${pokemon.id}`);
+    navigate(`/pokemon/${pokemon.name.toLowerCase()}`);
   };
 
   const handleTypeClick = (typeName: string) => {
@@ -256,6 +260,13 @@ const GalleryView: React.FC = () => {
         {/* Loading state for selected type */}
         {loading && selectedType && (
           <div className="loading">Loading {selectedType} Pokémon...</div>
+        )}
+
+        {/* Message when no type is selected */}
+        {!selectedType && !loading && allTypes.length > 0 && (
+          <div className="type-selection-message">
+            <p>Select a Pokémon type above to view Pokémon of that type.</p>
+          </div>
         )}
 
         {/* Pokemon Display */}

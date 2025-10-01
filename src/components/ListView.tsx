@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 interface Pokemon {
@@ -97,11 +97,13 @@ const ListView: React.FC = () => {
 
   // Re-sort existing results when sorting options change
   useEffect(() => {
-    if (pokemonList.length > 0) {
-      const sortedResults = sortPokemonList(pokemonList);
-      setPokemonList(sortedResults);
-    }
-  }, [sortBy, sortOrder, pokemonList, sortPokemonList]);
+    setPokemonList(prevList => {
+      if (prevList.length === 0) {
+        return prevList;
+      }
+      return sortPokemonList(prevList);
+    });
+  }, [sortPokemonList]);
 
   const getStatValue = (pokemon: Pokemon, statName: string): number => {
     const stat = pokemon.stats.find(s => s.stat.name === statName);
@@ -244,8 +246,15 @@ const ListView: React.FC = () => {
     searchPokemon(searchTerm);
   };
 
+  const navigate = useNavigate();
+  const handlePokemonClick = (pokemon: Pokemon) => {
+    navigate(`/pokemon/${pokemon.name.toLowerCase()}`);
+  };
+
   const renderPokemonCard = (pokemon: Pokemon) => (
-    <div key={pokemon.id} className="pokemon-card">
+    <div key={pokemon.id} 
+      className="pokemon-card"
+      onClick={() => handlePokemonClick(pokemon)}>
       <div className="pokemon-image">
         <img 
           src={pokemon.sprites.front_default || pokemon.sprites.other?.home?.front_default || pokemon.sprites.other?.official_artwork?.front_default || getFallbackSprite(pokemon)}
