@@ -2,6 +2,7 @@
   "name": "mp2-new",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://wwwemmm.github.io/cs409-mp2",
   "dependencies": {
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "^6.8.0",
@@ -11,6 +12,7 @@
     "@types/node": "^16.18.126",
     "@types/react": "^19.1.15",
     "@types/react-dom": "^19.1.9",
+    "axios": "^1.12.2",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.9.3",

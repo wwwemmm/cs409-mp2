@@ -10,7 +10,7 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <BrowserRouter>
+    <BrowserRouter basename="/cs409-mp2">
     <App />
     </BrowserRouter>
   </React.StrictMode>

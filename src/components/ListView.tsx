@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 interface Pokemon {
   id: number;
@@ -52,9 +53,8 @@ const ListView: React.FC = () => {
   useEffect(() => {
     const fetchPokemonNames = async () => {
       try {
-        const response = await fetch('https://pokeapi.co/api/v2/pokemon?limit=1302&_t=' + Date.now());
-        const data = await response.json();
-        setAllPokemon(data.results);
+        const response = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=1302&_t=' + Date.now());
+        setAllPokemon(response.data.results);
       } catch (err) {
         console.error('Failed to fetch Pokémon names:', err);
       }
@@ -170,11 +170,10 @@ const ListView: React.FC = () => {
     
     try {
       // First try exact match
-      const exactResponse = await fetch(`https://pokeapi.co/api/v2/pokemon/${name.toLowerCase()}`);
+      const exactResponse = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name.toLowerCase()}`);
       
-      if (exactResponse.ok) {
-        const exactData = await exactResponse.json();
-        setPokemon(exactData);
+      if (exactResponse.status === 200) {
+        setPokemon(exactResponse.data);
         setPokemonList([]);
         return;
       }
@@ -190,15 +189,14 @@ const ListView: React.FC = () => {
 
       if (filteredSuggestions.length === 1) {
         // Single match - fetch its details
-        const response = await fetch(filteredSuggestions[0].url);
-        const data = await response.json();
-        setPokemon(data);
+        const response = await axios.get(filteredSuggestions[0].url);
+        setPokemon(response.data);
         setPokemonList([]);
       } else {
         // Multiple matches - fetch details for all
         const promises = filteredSuggestions.slice(0, 10).map(async (p) => {
-          const response = await fetch(p.url);
-          return response.json();
+          const response = await axios.get(p.url);
+          return response.data;
         });
         
         const results = await Promise.all(promises);

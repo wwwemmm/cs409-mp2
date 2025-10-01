@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 interface Pokemon {
   id: number;
@@ -43,8 +44,8 @@ const GalleryView: React.FC = () => {
         setError(null);
 
         // Fetch all Pokémon types
-        const typesResponse = await fetch('https://pokeapi.co/api/v2/type');
-        const typesData = await typesResponse.json();
+        const typesResponse = await axios.get('https://pokeapi.co/api/v2/type');
+        const typesData = typesResponse.data;
         
         // Filter out types with no Pokémon and non-standard types
         const validTypes = [];
@@ -56,8 +57,8 @@ const GalleryView: React.FC = () => {
           }
           
           // Check if this type has Pokémon
-          const typeResponse = await fetch(type.url);
-          const typeData = await typeResponse.json();
+          const typeResponse = await axios.get(type.url);
+          const typeData = typeResponse.data;
           
           if (typeData.pokemon && typeData.pokemon.length > 0) {
             validTypes.push(type);
@@ -81,13 +82,13 @@ const GalleryView: React.FC = () => {
         setLoading(true);
         setError(null);
 
-        const typeResponse = await fetch(`https://pokeapi.co/api/v2/type/${typeName}`);
-        const typeData = await typeResponse.json();
+        const typeResponse = await axios.get(`https://pokeapi.co/api/v2/type/${typeName}`);
+        const typeData = typeResponse.data;
         
         // Get all Pokémon from this type
         const pokemonPromises = typeData.pokemon.map(async (pokemonEntry: any) => {
-          const pokemonResponse = await fetch(pokemonEntry.pokemon.url);
-          return pokemonResponse.json();
+          const pokemonResponse = await axios.get(pokemonEntry.pokemon.url);
+          return pokemonResponse.data;
         });
         
         const pokemon = await Promise.all(pokemonPromises);

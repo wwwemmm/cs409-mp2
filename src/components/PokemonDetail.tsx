@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
+import axios from 'axios';
 
 interface Pokemon {
   id: number;
@@ -59,18 +60,13 @@ const PokemonDetail: React.FC = () => {
       try {
         // Fetch all Pokémon names for navigation
         if (allPokemon.length === 0) {
-          const allPokemonResponse = await fetch('https://pokeapi.co/api/v2/pokemon?limit=1302');
-          const allPokemonData = await allPokemonResponse.json();
-          setAllPokemon(allPokemonData.results);
+          const allPokemonResponse = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=1302');
+          setAllPokemon(allPokemonResponse.data.results);
         }
 
         // Fetch specific Pokémon details
-        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
-        if (!response.ok) {
-          throw new Error(`Pokémon with ID ${id} not found.`);
-        }
-        const data = await response.json();
-        setPokemon(data);
+        const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${id}`);
+        setPokemon(response.data);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'An error occurred');
       } finally {
